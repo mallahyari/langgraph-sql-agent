@@ -76,7 +76,34 @@ workflow.add_conditional_edges(
     }
 )
 
-workflow.add_edge("sql_executor", "response_synthesizer")
+def executor_edge(state: AgentState):
+    """Route based on execution success/failure"""
+    query_error = state.get("query_error")
+    retry_count = state.get("retry_count", 0)
+    
+    print(f"[Executor Edge] Query error: {query_error}")
+    print(f"[Executor Edge] Retry count: {retry_count}")
+    
+    if query_error:
+        # Check retry count
+        if retry_count < 3:
+            print(f"[Executor Edge] Routing to sql_generator for retry")
+            return "sql_generator"
+        # Max retries reached, proceed to synthesizer to report error
+        print(f"[Executor Edge] Max retries reached, routing to response_synthesizer")
+        return "response_synthesizer"
+    
+    print(f"[Executor Edge] No error, routing to response_synthesizer")
+    return "response_synthesizer"
+
+workflow.add_conditional_edges(
+    "sql_executor",
+    executor_edge,
+    {
+        "sql_generator": "sql_generator",
+        "response_synthesizer": "response_synthesizer"
+    }
+)
 workflow.add_edge("response_synthesizer", "visualization_planner")
 
 workflow.add_conditional_edges(

@@ -69,8 +69,7 @@ export const ThinkingProcess: React.FC<ThinkingProcessProps> = ({ events, isComp
 
                     return (
                         <div key={idx} className={cn(
-                            "relative pl-8 pb-8 transition-all duration-500 ease-in-out group",
-                            isActive ? "opacity-100 scale-100" : "opacity-70 scale-95"
+                            "relative pl-8 pb-8 transition-all duration-500 ease-in-out group"
                         )}>
                             {/* Dot on timeline */}
                             <div className={cn(
@@ -87,7 +86,7 @@ export const ThinkingProcess: React.FC<ThinkingProcessProps> = ({ events, isComp
                                     <div className={cn("p-1.5 rounded-md transition-colors duration-300", bg)}>
                                         <Icon className={cn("w-4 h-4", color, isActive && "animate-pulse")} />
                                     </div>
-                                    <span className={cn("text-sm font-medium transition-colors duration-300", isActive ? "text-gray-900" : "text-gray-500")}>
+                                    <span className="text-sm font-medium transition-colors duration-300 text-gray-900">
                                         {label}
                                     </span>
                                 </div>

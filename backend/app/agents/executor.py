@@ -9,6 +9,14 @@ def sql_executor_node(state: AgentState):
     
     try:
         results = execute_read_query(sql_query)
-        return {"query_result": results, "query_error": None}
+        return {
+            "query_result": results,
+            "query_error": None,
+            "validation_error": None  # Clear validation errors on successful execution
+        }
     except Exception as e:
-        return {"query_result": [], "query_error": str(e)}
+        return {
+            "query_result": [],
+            "query_error": str(e),
+            "validation_error": None  # Clear validation errors when attempting execution
+        }

@@ -94,7 +94,7 @@ export const ChatInterface: React.FC = () => {
                                 )}
 
                                 <div className={cn(
-                                    "flex flex-col max-w-[85%]",
+                                    "flex flex-col max-w-[95%]",
                                     msg.role === 'user' ? "items-end" : "items-start"
                                 )}>
                                     {/* Thinking Process Integration */}

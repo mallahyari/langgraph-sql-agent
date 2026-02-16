@@ -11,5 +11,5 @@ def sql_validator_node(state: AgentState):
     return {
         "is_valid_sql": is_safe,
         "validation_error": error_message if not is_safe else None,
-        "query_error": None # Clear previous query errors on new validation
+        "query_error": None  # Clear execution errors when re-validating
     }

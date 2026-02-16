@@ -29,11 +29,13 @@ graph TD
     
     SQLGen --> Validator{SQL Validator}
     
-    Validator -- Invalid (Retry) --> SQLGen
+    Validator -- Invalid (Retry ≤3) --> SQLGen
     Validator -- Invalid (Max Retries) --> End
     Validator -- Valid --> Executor[SQL Executor]
     
-    Executor --> Synthesizer[Response Synthesizer]
+    Executor -- Error (Retry ≤3) --> SQLGen
+    Executor -- Success --> Synthesizer[Response Synthesizer]
+    Executor -- Error (Max Retries) --> Synthesizer
     
     Synthesizer --> VizPlanner{Visualization Planner}
     
