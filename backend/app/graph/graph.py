@@ -118,7 +118,7 @@ workflow.add_conditional_edges(
 workflow.add_edge("visualization_generator", END)
 workflow.add_edge("general_agent", END)
 
-# Compile
-# Checkpointer for persistence (using MemorySaver for now, could be Postgres)
+# Compile with MemorySaver for in-memory session isolation
+# Each thread_id gets isolated conversation history (lost on restart)
 checkpointer = MemorySaver()
 app_graph = workflow.compile(checkpointer=checkpointer)

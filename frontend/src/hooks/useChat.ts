@@ -1,10 +1,25 @@
 import { useState } from 'react';
 import type { Message, AgentEvent } from '../types';
 
+// Generate or retrieve session ID from localStorage
+const getSessionId = (): string => {
+    const STORAGE_KEY = 'sql_agent_session_id';
+    let sessionId = localStorage.getItem(STORAGE_KEY);
+
+    if (!sessionId) {
+        // Generate UUID v4
+        sessionId = crypto.randomUUID();
+        localStorage.setItem(STORAGE_KEY, sessionId);
+    }
+
+    return sessionId;
+};
+
 export const useChat = () => {
     const [messages, setMessages] = useState<Message[]>([]);
     const [isLoading, setIsLoading] = useState(false);
     const [currentTrace, setCurrentTrace] = useState<AgentEvent[]>([]);
+    const [sessionId] = useState<string>(getSessionId());
 
     const sendMessage = async (content: string) => {
         setIsLoading(true);
@@ -18,7 +33,10 @@ export const useChat = () => {
             const response = await fetch('http://localhost:8000/api/chat', {
                 method: 'POST',
                 headers: { 'Content-Type': 'application/json' },
-                body: JSON.stringify({ message: content })
+                body: JSON.stringify({
+                    message: content,
+                    thread_id: sessionId
+                })
             });
 
             if (!response.ok) throw new Error('Network response was not ok');
